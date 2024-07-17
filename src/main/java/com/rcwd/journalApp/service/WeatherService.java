@@ -2,6 +2,7 @@ package com.rcwd.journalApp.service;
 
 import com.rcwd.journalApp.api.response.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class WeatherService {
 
-    private static final String apikey = "d1e2f84a435e45f6a03d17cd48b80042";
+    @Value("${weather.api.key}")
+    private  String apikey;
     private static final String API = "https://api.weatherbit.io/v2.0/forecast/hourly?city=CITY&key=API_KEY";
 
   @Autowired
