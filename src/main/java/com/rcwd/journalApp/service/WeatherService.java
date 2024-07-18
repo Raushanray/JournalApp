@@ -1,6 +1,7 @@
 package com.rcwd.journalApp.service;
 
 import com.rcwd.journalApp.api.response.WeatherResponse;
+import com.rcwd.journalApp.cache.AppCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -13,17 +14,30 @@ public class WeatherService {
 
     @Value("${weather.api.key}")
     private  String apikey;
-    private static final String API = "https://api.weatherbit.io/v2.0/forecast/hourly?city=CITY&key=API_KEY";
+//    private static final String API = "https://api.weatherbit.io/v2.0/forecast/hourly?city=CITY&key=API_KEY";
 
   @Autowired
   private RestTemplate restTemplate;
 
+  @Autowired
+  private AppCache appCache;
 
 
-    public WeatherResponse getWeather(String city) {
+
+    /*public WeatherResponse getWeather(String city) {
         String finalAPI = API.replace("CITY", city).replace("API_KEY", apikey);
         ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
         return response.getBody();
+    }*/
+
+    public WeatherResponse getWeather(String city) {
+        String finalAPI = appCache.appCache.get(AppCache.keys.WEATHER_API.toString()).replace("<city>", city).replace("<apikey>", apikey);
+        ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
+        WeatherResponse body = response.getBody();
+//        if (body != null){
+//
+//        }
+        return body;
     }
     /*
     This method is creating for hit the post call of external api.
